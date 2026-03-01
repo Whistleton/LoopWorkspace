@@ -26,6 +26,8 @@ ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "120"
 platform :ios do
   desc "Build Loop"
   lane :build_loop do
+    ENV["MATCH_READONLY"] = false.to_s
+
     setup_ci if ENV['CI']
     
     update_project_team(
