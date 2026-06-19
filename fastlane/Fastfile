@@ -26,6 +26,8 @@ ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "120"
 platform :ios do
   desc "Build Loop"
   lane :build_loop do
+    ENV["MATCH_READONLY"] = false.to_s
+
     setup_ci if ENV['CI']
     
     update_project_team(
@@ -53,6 +55,7 @@ platform :ios do
     
     match(
       type: "appstore",
+      readonly: false,
       git_basic_authorization: Base64.strict_encode64("#{GITHUB_REPOSITORY_OWNER}:#{GH_PAT}"),
       app_identifier: [
         "com.#{TEAMID}.loopkit.Loop", 
@@ -229,7 +232,7 @@ platform :ios do
   desc "Validate Secrets"
   lane :validate_secrets do
     setup_ci if ENV['CI']
-    ENV["MATCH_READONLY"] = true.to_s
+    ENV["MATCH_READONLY"] = false.to_s
     
     app_store_connect_api_key(
       key_id: "#{FASTLANE_KEY_ID}",
